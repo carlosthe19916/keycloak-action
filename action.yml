@@ -1,0 +1,27 @@
+# action.yml
+name: 'Keycloak Action'
+description: 'Executes kcadm keycloak client against a defined server'
+branding:
+  icon: 'check'
+  color: 'red'
+inputs:
+  server:
+    description: 'The Keycloak server URL e.g. http://localhost:8080/auth'
+    required: true
+  username:
+    description: 'The username use to connect to Keycloak.'
+    required: true
+  password:
+    description: 'The password to connect to Keycloak.'
+    required: true
+  cmd:
+    description: 'The command to execute after authenticated in Keycloak e.g. update realms/rhamt -f rhamt-realm.json.'
+    required: true
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.server }}
+    - ${{ inputs.username }}
+    - ${{ inputs.password }}
+    - ${{ inputs.cmd }}
