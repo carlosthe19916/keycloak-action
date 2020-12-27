@@ -7,4 +7,4 @@ $JBOSS_HOME/bin/kcadm.sh config credentials \
 --realm master \
 --client admin-cli
 
-eval $JBOSS_HOME/bin/kcadm.sh $4
+eval $JBOSS_HOME/bin/kcadm.sh --server $1 $4
