@@ -1,5 +1,7 @@
 #!/bin/sh -l
 
+ifconfig
+
 $JBOSS_HOME/bin/kcadm.sh config credentials \
 --server $1 \
 --user $2 \
