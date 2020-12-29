@@ -25,6 +25,10 @@ inputs:
   cmd:
     description: 'The command to execute after authenticated in Keycloak e.g. update realms/rhamt -f rhamt-realm.json.'
     required: true
+  server-wait-timeout:
+    description: 'Time to wait until server is available.'
+    required: false
+    default: "120"
 runs:
   using: 'docker'
   image: 'Dockerfile'
@@ -35,3 +39,4 @@ runs:
     - ${{ inputs.realm }}
     - ${{ inputs.client }}
     - ${{ inputs.cmd }}
+    - ${{ inputs.server-wait-timeout }}

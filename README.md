@@ -32,6 +32,7 @@ There are 6 arguments available:
 | realm        | The realm to start a session against to (default master).      |   Optional |
 | client       | The client to start a session against to (default admin-cli).      |   Optional |
 | cmd          | The command to execute after authenticated in Keycloak e.g. update realms/rhamt -f rhamt-realm.json |    Required |
+| server-wait-timeout | Time (seconds) to wait until server is available (default 120 seconds). |    Optional |
 
 ## Example `workflow.yml` with keycloak Admin CLI
 
