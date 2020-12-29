@@ -1,9 +1,9 @@
 # action.yml
-name: 'Keycloak Action'
+name: 'Keycloak Admin CLI'
 description: 'Executes Keycloak Admin CLI against a defined server.'
 branding:
-  icon: 'check'
-  color: 'red'
+  icon: 'unlock'
+  color: 'blue'
 inputs:
   server:
     description: 'The server URL e.g. http://localhost:8080/auth'
