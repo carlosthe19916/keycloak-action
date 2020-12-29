@@ -1,19 +1,27 @@
 # action.yml
 name: 'Keycloak Action'
-description: 'Executes kcadm keycloak client against a defined server'
+description: 'Executes Keycloak Admin CLI against a defined server.'
 branding:
   icon: 'check'
   color: 'red'
 inputs:
   server:
-    description: 'The Keycloak server URL e.g. http://localhost:8080/auth'
+    description: 'The server URL e.g. http://localhost:8080/auth'
     required: true
   username:
-    description: 'The username use to connect to Keycloak.'
+    description: 'The username to start a session.'
     required: true
   password:
-    description: 'The password to connect to Keycloak.'
+    description: 'The password to start a session.'
     required: true
+  realm:
+    description: 'The realm to start a session against to (default master).'
+    required: false
+    default: master
+  client:
+    description: 'The client to start a session against to (default admin-cli).'
+    required: false
+    default: admin-cli
   cmd:
     description: 'The command to execute after authenticated in Keycloak e.g. update realms/rhamt -f rhamt-realm.json.'
     required: true
