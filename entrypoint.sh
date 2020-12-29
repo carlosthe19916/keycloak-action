@@ -3,7 +3,7 @@
 attempt_counter=0
 
 interval=3
-max_attempts=$(($6/interval));
+max_attempts=$(($7/interval));
 
 ## Wait until server is ready to continue
 until $(curl --output /dev/null --silent --head --fail $1); do
