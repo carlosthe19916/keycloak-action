@@ -32,4 +32,6 @@ runs:
     - ${{ inputs.server }}
     - ${{ inputs.username }}
     - ${{ inputs.password }}
+    - ${{ inputs.realm }}
+    - ${{ inputs.client }}
     - ${{ inputs.cmd }}
