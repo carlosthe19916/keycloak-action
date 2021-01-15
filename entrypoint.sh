@@ -17,6 +17,7 @@ until $(curl --output /dev/null --silent --head --fail $1); do
   sleep $interval
 done
 
+## Login
 $JBOSS_HOME/bin/kcadm.sh config credentials \
 --server $1 \
 --user $2 \
@@ -24,4 +25,8 @@ $JBOSS_HOME/bin/kcadm.sh config credentials \
 --realm $4 \
 --client $5
 
+## Execute jboss-cli.sh
+eval $JBOSS_HOME/bin/jboss-cli.sh $8
+
+## Execute kcadm.sh
 eval $JBOSS_HOME/bin/kcadm.sh $6

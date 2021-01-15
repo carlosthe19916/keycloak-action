@@ -29,6 +29,9 @@ inputs:
     description: 'Time to wait until server is available.'
     required: false
     default: "120"
+  jboss-cli:
+    description: "The jboss-cli.sh script"
+    required: false
 runs:
   using: 'docker'
   image: 'Dockerfile'
