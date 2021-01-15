@@ -3,7 +3,7 @@
 attempt_counter=0
 
 interval=3
-max_attempts=$(($7/interval));
+max_attempts=$(($6/interval));
 
 ## Wait until server is ready to continue
 until $(curl --output /dev/null --silent --head --fail $1); do
@@ -25,8 +25,5 @@ $JBOSS_HOME/bin/kcadm.sh config credentials \
 --realm $4 \
 --client $5
 
-## Execute jboss-cli.sh
-eval $JBOSS_HOME/bin/jboss-cli.sh $8
-
 ## Execute kcadm.sh
-eval $JBOSS_HOME/bin/kcadm.sh $6
+eval $JBOSS_HOME/bin/kcadm.sh $7
