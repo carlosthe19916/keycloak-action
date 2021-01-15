@@ -43,3 +43,4 @@ runs:
     - ${{ inputs.client }}
     - ${{ inputs.cmd }}
     - ${{ inputs.server-wait-timeout }}
+    - ${{ inputs.jboss-cli }}
