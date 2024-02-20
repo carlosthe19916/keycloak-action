@@ -26,7 +26,7 @@ $JBOSS_HOME/bin/kcadm.sh config credentials \
 --client $5
 
 ## parse commands
-readarray -t commands <<< "$7"
+readarray -t commands <<< "$(echo "$7" | sed '/^$/d')"
 
 ## Execute kcadm.sh
 for cmd in "${commands[@]}";
