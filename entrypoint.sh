@@ -25,11 +25,8 @@ $JBOSS_HOME/bin/kcadm.sh config credentials \
 --realm $4 \
 --client $5
 
-echo "::debug title=Input commands::commands received via input: $7"
-
 ## parse commands
-IFS=$'\n'
-read -a commands <<< "$7"
+readarray -t commands <<< "$7"
 
 ## Execute kcadm.sh
 for cmd in "${commands[@]}";
