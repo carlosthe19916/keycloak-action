@@ -1,4 +1,4 @@
-#!/bin/sh -l
+#!/bin/bash -l
 
 attempt_counter=0
 
@@ -6,7 +6,7 @@ interval=3
 max_attempts=$(($6/interval));
 
 ## Wait until server is ready to continue
-until $(curl --output /dev/null --silent --head --fail $1); do
+until (curl --output /dev/null --silent --head --fail $1); do
   if [ ${attempt_counter} -eq ${max_attempts} ];then
     echo "Max attempts reached"
     exit 1
@@ -25,5 +25,16 @@ $JBOSS_HOME/bin/kcadm.sh config credentials \
 --realm $4 \
 --client $5
 
+## parse commands
+IFS=$'\n'
+read -r -a commands <<< "$7"
+
 ## Execute kcadm.sh
-eval $JBOSS_HOME/bin/kcadm.sh $7
+for cmd in "${commands[@]}";
+do eval "$JBOSS_HOME/bin/kcadm.sh $cmd";
+done
+
+
+
+
+

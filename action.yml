@@ -27,7 +27,7 @@ inputs:
     required: false
     default: "120"
   kcadm:
-    description: 'The command to execute after authenticated in Keycloak e.g. update realms/rhamt -f rhamt-realm.json.'
+    description: 'The commands to execute after authenticated in Keycloak e.g. update realms/rhamt -f rhamt-realm.json.'
     required: true
 runs:
   using: 'docker'
