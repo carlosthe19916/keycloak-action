@@ -25,14 +25,14 @@ $JBOSS_HOME/bin/kcadm.sh config credentials \
 --realm $4 \
 --client $5
 
-## parse commands
-readarray -t commands <<< "$(echo "$7" | sed '/^$/d')"
+## remove empty strings and parse command lines
+readarray -t lines <<< "$(echo "$7" | sed '/^$/d')"
 
-## Execute kcadm.sh
-for cmd in "${commands[@]}";
+## Execute kcadm.sh for each command line
+for l in "${lines[@]}";
 do
-  echo "::debug title=command execution::Executing command $cmd"
-  eval "$JBOSS_HOME/bin/kcadm.sh $cmd";
+  echo "::debug title=command execution::Executing command $l"
+  eval "$JBOSS_HOME/bin/kcadm.sh $l";
 done
 
 
