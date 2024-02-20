@@ -31,7 +31,9 @@ read -r -a commands <<< "$7"
 
 ## Execute kcadm.sh
 for cmd in "${commands[@]}";
-do eval "$JBOSS_HOME/bin/kcadm.sh $cmd";
+do
+  echo "::debug title=command execution::Executing command $cmd"
+  eval "$JBOSS_HOME/bin/kcadm.sh $cmd";
 done
 
 
