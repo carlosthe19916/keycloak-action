@@ -27,7 +27,7 @@ $JBOSS_HOME/bin/kcadm.sh config credentials \
 
 ## parse commands
 IFS=$'\n'
-read -r -a commands <<< "$7"
+read -a commands <<< "$7"
 
 ## Execute kcadm.sh
 for cmd in "${commands[@]}";
