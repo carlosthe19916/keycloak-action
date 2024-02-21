@@ -4,7 +4,7 @@ Github Action for executing [Keycloak](https://www.keycloak.org/) Admin CLI agai
 You can read more about Keycloak Admin CLI in the official [documentation](https://www.keycloak.org/docs/latest/server_admin/index.html#the-admin-cli).
 
 ## Usage
-To execute a command using the Keycloak Admin CLI within your Github Actions pipeline include `carlosthe19916/keycloak-action@0.4` in your `workflow.yml file.
+To execute one or more commands using the Keycloak Admin CLI within your Github Actions pipeline include `carlosthe19916/keycloak-action@0.4` in your `workflow.yml file.
 
 Inside your `.github/workflows/workflow.yml` file:
 
@@ -20,6 +20,22 @@ steps:
     kcadm: create realms -f openubl-realm.json
 ```
 
+To execute more than one command:
+
+```yaml
+steps:
+- uses: actions/checkout@v2
+- name: Keycloak Admin CLI
+  uses: carlosthe19916/keycloak-action@0.4
+  with:
+    server: http://keycloak:8080/auth
+    username: admin
+    password: admin
+    kcadm: |
+      create realms -f openubl-realm.json
+      create clients -r openubl -s clientId=myClient -s enabled=true
+```
+
 ## Arguments
 There are 6 arguments available:
 
@@ -31,7 +47,7 @@ There are 6 arguments available:
 | password     | The password to start a session.      |   Required |
 | realm        | The realm to start a session against to (default master).      |   Optional |
 | client       | The client to start a session against to (default admin-cli).      |   Optional |
-| kcadm          | The command to execute after authenticated in Keycloak e.g. update realms/rhamt -f rhamt-realm.json |    Required |
+| kcadm        | The command (or commands) to execute after authenticated in Keycloak e.g. update realms/rhamt -f rhamt-realm.json . To execute more than one command, use "\|" and type the commands on multiple lines. |    Required |
 | server-wait-timeout | Time (seconds) to wait until server is available (default 120 seconds). |    Optional |
 
 ## Example `workflow.yml` with keycloak Admin CLI
