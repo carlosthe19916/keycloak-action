@@ -4,7 +4,7 @@ Github Action for executing [Keycloak](https://www.keycloak.org/) Admin CLI agai
 You can read more about Keycloak Admin CLI in the official [documentation](https://www.keycloak.org/docs/latest/server_admin/index.html#the-admin-cli).
 
 ## Usage
-To execute one or more commands using the Keycloak Admin CLI within your Github Actions pipeline include `carlosthe19916/keycloak-action@0.4` in your `workflow.yml file.
+To execute one or more commands using the Keycloak Admin CLI within your Github Actions pipeline include `carlosthe19916/keycloak-action@0.4` in your `workflow.yml` file.
 
 Inside your `.github/workflows/workflow.yml` file:
 
