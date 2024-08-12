@@ -6,7 +6,7 @@ interval=3
 max_attempts=$(($6/interval));
 
 ## Wait until server is ready to continue
-until (curl --output /dev/null --silent --head --fail $1); do
+until (/opt/curl --output /dev/null --silent --head --fail $1); do
   if [ ${attempt_counter} -eq ${max_attempts} ];then
     echo "Max attempts reached"
     exit 1
