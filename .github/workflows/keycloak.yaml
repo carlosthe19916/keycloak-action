@@ -25,7 +25,7 @@ jobs:
         run: |
           docker run -d --name keycloak -p 8080:8080 -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=password quay.io/keycloak/keycloak:${{ github.event.inputs.version }}
       - name: Keycloak Admin CLI
-        uses: .
+        uses: carlosthe19916/keycloak-action@master
         with:
           server: http://localhost:8080/auth
           username: admin
