@@ -14,6 +14,7 @@ steps:
 - name: Keycloak Admin CLI
   uses: carlosthe19916/keycloak-action@0.4
   with:
+    version: latest
     server: http://keycloak:8080/auth
     username: admin
     password: admin
@@ -42,6 +43,7 @@ There are 6 arguments available:
 
 | Input        | Description           | Usage  |
 | ------------ |:---------------------:| ------:|
+| version       | The Keycloak client version to use |
 | server       | The server URL e.g. http://localhost:8080/auth | Required |
 | username     | The username to start a session.      |   Required |
 | password     | The password to start a session.      |   Required |
@@ -70,6 +72,7 @@ jobs:
       - name: Keycloak Admin CLI
         uses: carlosthe19916/keycloak-action@0.4
         with:
+          version: latest
           server: http://keycloak:8080/auth # Use port 8080 instead of 8180
           username: admin
           password: admin
