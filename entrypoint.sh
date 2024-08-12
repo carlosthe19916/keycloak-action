@@ -17,6 +17,11 @@ until (curl --output /dev/null --silent --head --fail $1); do
   sleep $interval
 done
 
+## JBOSS_HOME is not set for the Quarkus based Keycloak server
+if [ -z ${JBOSS_HOME} ]; then
+  JBOSS_HOME="/opt/keycloak";
+fi
+
 ## Login
 $JBOSS_HOME/bin/kcadm.sh config credentials \
 --server $1 \

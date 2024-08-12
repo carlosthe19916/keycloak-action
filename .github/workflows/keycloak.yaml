@@ -1,0 +1,26 @@
+name: Keycloak
+
+on:
+  workflow_call:
+    inputs:
+      keycloak-version:
+        description: "Version of Keycloak to test"
+        default: "latest"
+        required: true
+        type: string
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Start Keycloak
+        run: |
+          docker run -d --name keycloak -p 8080:8080 -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=password quay.io/keycloak/keycloak:${{ github.event.inputs.version }}
+      - name: Keycloak Admin CLI
+        uses: action.yml
+        with:
+          server: http://localhost:8080/auth
+          username: admin
+          password: admin
+          kcadm: get realms
