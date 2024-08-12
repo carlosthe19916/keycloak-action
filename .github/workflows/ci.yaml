@@ -1,0 +1,19 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - "master"
+  pull_request:
+    branches:
+      - "master"
+
+jobs:
+  ci:
+    uses: ./.github/workflows/keycloak.yaml
+    strategy:
+      matrix:
+        keycloak-version: [latest]
+      fail-fast: false
+    with:
+      keycloak-version: ${{ matrix.kubernetes_version }}
