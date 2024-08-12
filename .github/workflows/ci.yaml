@@ -1,0 +1,33 @@
+on:
+  push:
+    branches:
+      - "master"
+  pull_request:
+    branches:
+      - "master"
+
+jobs:
+  v12_0_2:
+    runs-on: ubuntu-latest
+    services:
+      keycloak:
+        image: quay.io/keycloak/keycloak:12.0.2
+        ports:
+          - 8180:8080
+        env:
+          KEYCLOAK_USER: admin
+          KEYCLOAK_PASSWORD: password
+        options: >-
+          --health-cmd "curl --fail http://localhost:8080/auth || exit 1"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - name: Keycloak Admin CLI
+        uses: carlosthe19916/keycloak-action@master
+        with:
+          version: 12.0.2
+          server: http://keycloak:8080/auth
+          username: admin
+          password: password
+          kcadm: get realms

@@ -5,6 +5,10 @@ branding:
   icon: 'unlock'
   color: 'blue'
 inputs:
+  version:
+    description: 'The version of the keycloak image client to use'
+    required: false
+    default: "latest"
   server:
     description: 'The server URL e.g. http://localhost:8080/auth'
     required: true
@@ -30,8 +34,10 @@ inputs:
     description: 'The commands to execute after authenticated in Keycloak e.g. update realms/rhamt -f rhamt-realm.json.'
     required: true
 runs:
-  using: 'docker'
-  image: 'Dockerfile'
+  using: docker
+  image: Dockerfile
+  env:
+    KEYCLOAK_VERSION: ${{ inputs.version }}
   args:
     - ${{ inputs.server }}
     - ${{ inputs.username }}

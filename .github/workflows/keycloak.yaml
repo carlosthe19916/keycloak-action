@@ -1,0 +1,58 @@
+name: Keycloak
+
+on:
+  workflow_call:
+    inputs:
+      keycloak_version:
+        description: "Version of Keycloak to test"
+        default: "latest"
+        required: true
+        type: string
+      keycloak_auth_path:
+        description: "Base path of the server"
+        default: ""
+        required: false
+        type: string
+      keycloak_cmd:
+        description: "Command to execute in keycloak"
+        default: "start-dev"
+        required: false
+        type: string
+  workflow_dispatch:
+    inputs:
+      keycloak_version:
+        description: "Version of Keycloak to test"
+        default: "latest"
+        required: true
+        type: string
+      keycloak_auth_path:
+        description: "Base path of the server"
+        default: ""
+        required: false
+        type: string
+      keycloak_cmd:
+        description: "Command to execute in keycloak"
+        default: "start-dev"
+        required: false
+        type: string
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Start Keycloak
+        run: |
+          docker run -d --name keycloak --network host \
+            -p 8080:8080 -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=password quay.io/keycloak/keycloak:${{ inputs.keycloak_version }} ${{ inputs.keycloak_cmd }}
+          sleep 15
+          docker inspect keycloak -f "{{json .NetworkSettings.Networks }}"
+          docker logs keycloak
+      - name: Keycloak Admin CLI
+        uses: carlosthe19916/keycloak-action@master
+        with:
+          version: ${{ inputs.keycloak_version }}
+          server: http://localhost:8080/${{ inputs.keycloak_auth_path }}
+          username: admin
+          password: password
+          kcadm: get realms
