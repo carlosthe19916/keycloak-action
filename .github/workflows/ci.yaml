@@ -2,6 +2,7 @@ on:
   push:
     branches:
       - "master"
+      - "test"
   pull_request:
     branches:
       - "master"
@@ -32,6 +33,28 @@ jobs:
         with:
           version: ${{ matrix.version }}
           server: http://keycloak:8080/auth
+          username: admin
+          password: password
+          kcadm: get realms
+
+  quarkus:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        version: ["latest"]
+      fail-fast: false
+    steps:
+      - name: Init Keycloak
+        run: |
+          docker run -d --name keycloak -p 8080:8080 \
+          -e KEYCLOAK_ADMIN=admin \
+          -e KEYCLOAK_ADMIN_PASSWORD=password \
+          quay.io/keycloak/keycloak:${{ matrix.version }} start-dev
+      - name: Keycloak Admin CLI
+        uses: carlosthe19916/keycloak-action@master
+        with:
+          version: ${{ matrix.version }}
+          server: http://localhost:8080/auth
           username: admin
           password: password
           kcadm: get realms
