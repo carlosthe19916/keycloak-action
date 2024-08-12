@@ -8,6 +8,13 @@ on:
         default: "latest"
         required: true
         type: string
+  workflow_dispatch:
+    inputs:
+      keycloak-version:
+        description: "Version of Keycloak to test"
+        default: "latest"
+        required: true
+        type: string
 
 jobs:
   test:
