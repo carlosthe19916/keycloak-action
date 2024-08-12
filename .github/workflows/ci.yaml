@@ -11,7 +11,7 @@ jobs:
     uses: ./.github/workflows/keycloak.yaml
     strategy:
       matrix:
-        keycloak-version: [latest]
+        keycloak_version: [latest]
       fail-fast: false
     with:
-      keycloak-version: ${{ matrix.keycloak-version }}
+      keycloak_version: ${{ matrix.keycloak_version }}
