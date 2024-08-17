@@ -4,7 +4,7 @@ Github Action for executing [Keycloak](https://www.keycloak.org/) Admin CLI agai
 You can read more about Keycloak Admin CLI in the official [documentation](https://www.keycloak.org/docs/latest/server_admin/index.html#the-admin-cli).
 
 ## Usage
-To execute one or more commands using the Keycloak Admin CLI within your Github Actions pipeline include `carlosthe19916/keycloak-action@0.4` in your `workflow.yml` file.
+To execute one or more commands using the Keycloak Admin CLI within your Github Actions pipeline include `carlosthe19916/keycloak-action@0.6` in your `workflow.yml` file.
 
 Inside your `.github/workflows/workflow.yml` file:
 
@@ -12,12 +12,12 @@ Inside your `.github/workflows/workflow.yml` file:
 steps:
 - uses: actions/checkout@v2
 - name: Keycloak Admin CLI
-  uses: carlosthe19916/keycloak-action@0.4
+  uses: carlosthe19916/keycloak-action@0.6
   with:
     version: latest
-    server: http://keycloak:8080/auth
+    server: http://keycloak:8080
     username: admin
-    password: admin
+    password: password
     kcadm: create realms -f openubl-realm.json
 ```
 
@@ -31,7 +31,7 @@ steps:
   with:
     server: http://keycloak:8080/auth
     username: admin
-    password: admin
+    password: password
     kcadm: |
       create realms -f openubl-realm.json
       create clients -r openubl -s clientId=myClient -s enabled=true
@@ -43,7 +43,7 @@ There are 6 arguments available:
 
 | Input        | Description           | Usage  |
 | ------------ |:---------------------:| ------:|
-| version       | The Keycloak client version to use |
+| version      | The Keycloak client version to use |
 | server       | The server URL e.g. http://localhost:8080/auth | Required |
 | username     | The username to start a session.      |   Required |
 | password     | The password to start a session.      |   Required |
@@ -60,21 +60,20 @@ on: [push]
 jobs:
   example:
     runs-on: ubuntu-latest
-    services:
-      keycloak:
-        image: quay.io/keycloak/keycloak:12.0.1
-        ports:
-          - 8180:8080
-        env:
-          KEYCLOAK_USER: admin
-          KEYCLOAK_PASSWORD: admin
     steps:
+      - name: Init Keycloak
+        run: |
+          docker run -d --name keycloak -p 8080:8080 \
+          -e KEYCLOAK_ADMIN=admin \
+          -e KEYCLOAK_ADMIN_PASSWORD=password \
+          quay.io/keycloak/keycloak:latest start-dev
       - name: Keycloak Admin CLI
-        uses: carlosthe19916/keycloak-action@0.4
+        uses: carlosthe19916/keycloak-action@0.6
         with:
           version: latest
-          server: http://keycloak:8080/auth # Use port 8080 instead of 8180
+          server: http://keycloak:8080
           username: admin
-          password: admin
-          kcadm: create realms -f openubl-realm.json
+          password: password
+          kcadm: |
+            get realms
 ```
