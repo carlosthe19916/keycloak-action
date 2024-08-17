@@ -41,7 +41,8 @@ runs:
       env:
         KEYCLOAK_IMG: quay.io/keycloak/keycloak:${{ inputs.version }}
       run: |
-        major_version=$(("$(echo ${{ inputs.version }} | cut -d'.' -f1)"))
+        mkdir -p /keycloak/bin
+        major_version=$(("$(echo ${{ inputs.version }} | cut -d'.' -f1)"))        
         if (( major_version > 19 )); then
           docker cp $(docker create --name download $KEYCLOAK_IMG ls):/opt/keycloak/bin /keycloak/bin && docker rm download
         else
