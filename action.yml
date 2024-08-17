@@ -90,8 +90,6 @@ runs:
         done
 
         ## Login
-        ls /tmp/keycloak
-        ls /tmp/keycloak/bin
         /tmp/keycloak/kcadm.sh config credentials \
         --server ${SERVER_URL} \
         --user ${USERNAME} \
