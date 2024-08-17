@@ -41,12 +41,12 @@ runs:
       env:
         KEYCLOAK_IMG: quay.io/keycloak/keycloak:${{ inputs.version }}
       run: |
-        mkdir -p /keycloak/bin
+        mkdir -p /tmp/keycloak/bin
         major_version=$(("$(echo ${{ inputs.version }} | cut -d'.' -f1)"))        
         if (( major_version > 19 )); then
-          docker cp $(docker create --name download $KEYCLOAK_IMG ls):/opt/keycloak/bin /keycloak/bin && docker rm download
+          docker cp $(docker create --name download $KEYCLOAK_IMG ls):/opt/keycloak/bin /tmp/keycloak/bin && docker rm download
         else
-          docker cp $(docker create --name download $KEYCLOAK_IMG ls):/opt/jboss/keycloak/bin /keycloak/bin && docker rm download
+          docker cp $(docker create --name download $KEYCLOAK_IMG ls):/opt/jboss/keycloak/bin /tmp/keycloak/bin && docker rm download
         fi
     - name: Execute client
       shell: bash
@@ -70,7 +70,7 @@ runs:
         done
 
         ## Login
-        /keycloak/bin/kcadm.sh config credentials \
+        /tmp/keycloak/bin/kcadm.sh config credentials \
         --server ${{ inputs.server }} \
         --user ${{ inputs.username }} \
         --password ${{ inputs.password }} \
@@ -84,7 +84,7 @@ runs:
         for l in "${lines[@]}";
         do
           echo "::debug title=command execution::Executing command $l"
-          eval "/keycloak/bin/kcadm.sh $l";
+          eval "/tmp/keycloak/bin/kcadm.sh $l";
         done
 
 
