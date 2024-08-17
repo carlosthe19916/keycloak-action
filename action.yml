@@ -88,13 +88,15 @@ runs:
           sleep $interval
         done
 
-    #     ## Login
-    #     /tmp/keycloak/bin/kcadm.sh config credentials \
-    #     --server ${{ inputs.server }} \
-    #     --user ${{ inputs.username }} \
-    #     --password ${{ inputs.password }} \
-    #     --realm ${{ inputs.realm }} \
-    #     --client ${{ inputs.client }}
+        ## Login
+        ls /tmp/keycloak
+        ls /tmp/keycloak/bin
+        /tmp/keycloak/bin/kcadm.sh config credentials \
+        --server ${SERVER_URL} \
+        --user ${USERNAME} \
+        --password ${PASSWORD} \
+        --realm ${REALM} \
+        --client ${CLIENT}
 
     #     ## remove empty strings and parse command lines
     #     readarray -t lines <<< "$(echo "${{ inputs.kcadm }}" | sed '/^$/d')"
