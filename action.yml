@@ -58,8 +58,7 @@ runs:
             fi;
         fi;
 
-        docker cp $(docker create --name download $KEYCLOAK_IMG ls):${BIN_DIRECTORY} /tmp/keycloak && docker rm download
-        ls /tmp/keycloak
+        docker cp $(docker create --name download $KEYCLOAK_IMG ls):${BIN_DIRECTORY} /tmp/keycloak/bin && docker rm download
         
     - name: Execute client
       shell: bash
@@ -90,35 +89,19 @@ runs:
         done
 
         ## Login
-        /tmp/keycloak/kcadm.sh config credentials \
+        /tmp/keycloak/bin/kcadm.sh config credentials \
         --server ${SERVER_URL} \
         --user ${USERNAME} \
         --password ${PASSWORD} \
         --realm ${REALM} \
         --client ${CLIENT}
 
-    #     ## remove empty strings and parse command lines
-    #     readarray -t lines <<< "$(echo "${{ inputs.kcadm }}" | sed '/^$/d')"
+        ## remove empty strings and parse command lines
+        readarray -t lines <<< "$(echo "${COMMAND}" | sed '/^$/d')"
 
-    #     ## Execute kcadm.sh for each command line
-    #     for l in "${lines[@]}";
-    #     do
-    #       echo "::debug title=command execution::Executing command $l"
-    #       eval "/tmp/keycloak/bin/kcadm.sh $l";
-    #     done
-
-
-
-
-
-
-#  env:
-#    KEYCLOAK_VERSION: ${{ inputs.version }}
-#  args:
-#    - ${{ inputs.server }}
-#    - ${{ inputs.username }}
-#    - ${{ inputs.password }}
-#    - ${{ inputs.realm }}
-#    - ${{ inputs.client }}
-#    - ${{ inputs.server-wait-timeout }}
-#    - ${{ inputs.kcadm }}
+        ## Execute kcadm.sh for each command line
+        for l in "${lines[@]}";
+        do
+          echo "::debug title=command execution::Executing command $l"
+          eval "/tmp/keycloak/bin/kcadm.sh $l";
+        done
