@@ -59,6 +59,7 @@ runs:
         fi;
 
         docker cp $(docker create --name download $KEYCLOAK_IMG ls):${BIN_DIRECTORY} /tmp/keycloak && docker rm download
+        ls /tmp/keycloak
         
     - name: Execute client
       shell: bash
@@ -91,7 +92,7 @@ runs:
         ## Login
         ls /tmp/keycloak
         ls /tmp/keycloak/bin
-        /tmp/keycloak/bin/kcadm.sh config credentials \
+        /tmp/keycloak/kcadm.sh config credentials \
         --server ${SERVER_URL} \
         --user ${USERNAME} \
         --password ${PASSWORD} \
