@@ -34,15 +34,70 @@ inputs:
     description: 'The commands to execute after authenticated in Keycloak e.g. update realms/rhamt -f rhamt-realm.json.'
     required: true
 runs:
-  using: docker
-  image: Dockerfile
-  env:
-    KEYCLOAK_VERSION: ${{ inputs.version }}
-  args:
-    - ${{ inputs.server }}
-    - ${{ inputs.username }}
-    - ${{ inputs.password }}
-    - ${{ inputs.realm }}
-    - ${{ inputs.client }}
-    - ${{ inputs.server-wait-timeout }}
-    - ${{ inputs.kcadm }}
+  using: composite
+  steps:
+    - name: Download Keycloak client
+      shell: bash
+      env:
+        KEYCLOAK_IMG: quay.io/keycloak/keycloak:${{ inputs.version }}
+      run: |
+        major_version=$(("$(echo ${{ inputs.version }} | cut -d'.' -f1)"))
+        if (( major_version > 19 )); then
+          docker cp $(docker create --name download $KEYCLOAK_IMG ls):/opt/keycloak/bin /keycloak/bin && docker rm download
+        else
+          docker cp $(docker create --name download $KEYCLOAK_IMG ls):/opt/jboss/keycloak/bin /keycloak/bin && docker rm download
+        fi
+    - name: Execute client
+      shell: bash
+      run: |
+        attempt_counter=0
+
+        interval=3
+        max_attempts=$((${{ inputs.server-wait-timeout }}/interval));
+
+        ## Wait until server is ready to continue
+        echo "Waiting for ${{ inputs.server }}"
+        until (curl --output /dev/null --silent --head --fail ${{ inputs.server }}); do
+          if [ ${attempt_counter} -eq ${max_attempts} ];then
+            echo "Max attempts reached"
+            exit 1
+          fi
+
+          printf '.'
+          attempt_counter=$(($attempt_counter+1))
+          sleep $interval
+        done
+
+        ## Login
+        /keycloak/bin/kcadm.sh config credentials \
+        --server ${{ inputs.server }} \
+        --user ${{ inputs.username }} \
+        --password ${{ inputs.password }} \
+        --realm ${{ inputs.realm }} \
+        --client ${{ inputs.client }}
+
+        ## remove empty strings and parse command lines
+        readarray -t lines <<< "$(echo "${{ inputs.kcadm }}" | sed '/^$/d')"
+
+        ## Execute kcadm.sh for each command line
+        for l in "${lines[@]}";
+        do
+          echo "::debug title=command execution::Executing command $l"
+          eval "/keycloak/bin/kcadm.sh $l";
+        done
+
+
+
+
+
+
+#  env:
+#    KEYCLOAK_VERSION: ${{ inputs.version }}
+#  args:
+#    - ${{ inputs.server }}
+#    - ${{ inputs.username }}
+#    - ${{ inputs.password }}
+#    - ${{ inputs.realm }}
+#    - ${{ inputs.client }}
+#    - ${{ inputs.server-wait-timeout }}
+#    - ${{ inputs.kcadm }}

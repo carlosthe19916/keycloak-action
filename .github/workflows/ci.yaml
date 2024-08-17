@@ -22,7 +22,7 @@ jobs:
           -e KEYCLOAK_ADMIN_PASSWORD=password \
           quay.io/keycloak/keycloak:${{ matrix.version }} start-dev
       - name: Keycloak Admin CLI
-        uses: carlosthe19916/keycloak-action@master
+        uses: carlosthe19916/keycloak-action@test
         with:
           version: ${{ matrix.version }}
           server: http://localhost:8080
