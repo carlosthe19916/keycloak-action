@@ -18,8 +18,8 @@ jobs:
       - name: Init Keycloak
         run: |
           docker run -d --name keycloak -p 8080:8080 \
-          -e KEYCLOAK_ADMIN=admin \
-          -e KEYCLOAK_ADMIN_PASSWORD=password \
+          -e KEYCLOAK_USER=admin \
+          -e KEYCLOAK_PASSWORD=password \
           quay.io/keycloak/keycloak:${{ matrix.version }}
       - name: Keycloak Admin CLI
         uses: carlosthe19916/keycloak-action@test
