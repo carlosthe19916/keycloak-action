@@ -1,7 +1,10 @@
+name: ci
+
 on:
   push:
     branches:
       - "master"
+      - "test"
   pull_request:
     branches:
       - "master"
@@ -11,27 +14,42 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        version: ["12.0.2", "19.0.3-legacy"]
+        version: ["19.0.2-legacy", "12.0.4"]
       fail-fast: false
-    services:
-      keycloak:
-        image: quay.io/keycloak/keycloak:${{ matrix.version }}
-        ports:
-          - 8180:8080
-        env:
-          KEYCLOAK_USER: admin
-          KEYCLOAK_PASSWORD: password
-        options: >-
-          --health-cmd "curl --fail http://localhost:8080/auth || exit 1"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
     steps:
+      - name: Init Keycloak
+        run: |
+          docker run -d --name keycloak -p 8080:8080 \
+          -e KEYCLOAK_USER=admin \
+          -e KEYCLOAK_PASSWORD=password \
+          quay.io/keycloak/keycloak:${{ matrix.version }}
       - name: Keycloak Admin CLI
-        uses: carlosthe19916/keycloak-action@master
+        uses: carlosthe19916/keycloak-action@test
         with:
           version: ${{ matrix.version }}
-          server: http://keycloak:8080/auth
+          server: http://localhost:8080/auth
+          username: admin
+          password: password
+          kcadm: get realms
+
+  quarkus:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        version: ["latest", "25.0.1", "19.0.2"]
+      fail-fast: false
+    steps:
+      - name: Init Keycloak
+        run: |
+          docker run -d --name keycloak -p 8080:8080 \
+          -e KEYCLOAK_ADMIN=admin \
+          -e KEYCLOAK_ADMIN_PASSWORD=password \
+          quay.io/keycloak/keycloak:${{ matrix.version }} start-dev
+      - name: Keycloak Admin CLI
+        uses: carlosthe19916/keycloak-action@test
+        with:
+          version: ${{ matrix.version }}
+          server: http://localhost:8080
           username: admin
           password: password
           kcadm: get realms
