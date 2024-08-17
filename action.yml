@@ -42,12 +42,21 @@ runs:
         KEYCLOAK_IMG: quay.io/keycloak/keycloak:${{ inputs.version }}
       run: |
         mkdir -p /tmp/keycloak/bin
-        major_version=$(("$(echo ${{ inputs.version }} | cut -d'.' -f1)"))        
-        if (( major_version > 19 )); then
-          docker cp $(docker create --name download $KEYCLOAK_IMG ls):/opt/keycloak/bin /tmp/keycloak/bin && docker rm download
+
+        bin_directory=""
+        if [ "${{ inputs.version }}" = "latest" ]; then 
+          bin_directory="/opt/keycloak/bin"
         else
-          docker cp $(docker create --name download $KEYCLOAK_IMG ls):/opt/jboss/keycloak/bin /tmp/keycloak/bin && docker rm download
-        fi
+          major_version=$(("$(echo ${{ inputs.version }} | cut -d'.' -f1)"))        
+          if (( major_version > 19 )); then
+            bin_directory="/opt/keycloak/bin"
+          else
+            bin_directory="/opt/jboss/keycloak/bin"
+          fi;
+        fi;
+
+        docker cp $(docker create --name download $KEYCLOAK_IMG ls):$bin_directory /tmp/keycloak/bin && docker rm download
+        
     - name: Execute client
       shell: bash
       run: |
