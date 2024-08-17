@@ -60,44 +60,44 @@ runs:
 
         docker cp $(docker create --name download $KEYCLOAK_IMG ls):${BIN_DIRECTORY} /tmp/keycloak && docker rm download
         
-    - name: Execute client
-      shell: bash
-      run: |
-        attempt_counter=0
+    # - name: Execute client
+    #   shell: bash
+    #   run: |
+    #     attempt_counter=0
 
-        interval=3
-        max_attempts=$((${{ inputs.server-wait-timeout }}/interval));
+    #     interval=3
+    #     max_attempts=$((${{ inputs.server-wait-timeout }}/interval));
 
-        ## Wait until server is ready to continue
-        echo "Waiting for ${{ inputs.server }}"
-        until (curl --output /dev/null --silent --head --fail ${{ inputs.server }}); do
-          if [ ${attempt_counter} -eq ${max_attempts} ];then
-            echo "Max attempts reached"
-            exit 1
-          fi
+    #     ## Wait until server is ready to continue
+    #     echo "Waiting for ${{ inputs.server }}"
+    #     until (curl --output /dev/null --silent --head --fail ${{ inputs.server }}); do
+    #       if [ ${attempt_counter} -eq ${max_attempts} ];then
+    #         echo "Max attempts reached"
+    #         exit 1
+    #       fi
 
-          printf '.'
-          attempt_counter=$(($attempt_counter+1))
-          sleep $interval
-        done
+    #       printf '.'
+    #       attempt_counter=$(($attempt_counter+1))
+    #       sleep $interval
+    #     done
 
-        ## Login
-        /tmp/keycloak/bin/kcadm.sh config credentials \
-        --server ${{ inputs.server }} \
-        --user ${{ inputs.username }} \
-        --password ${{ inputs.password }} \
-        --realm ${{ inputs.realm }} \
-        --client ${{ inputs.client }}
+    #     ## Login
+    #     /tmp/keycloak/bin/kcadm.sh config credentials \
+    #     --server ${{ inputs.server }} \
+    #     --user ${{ inputs.username }} \
+    #     --password ${{ inputs.password }} \
+    #     --realm ${{ inputs.realm }} \
+    #     --client ${{ inputs.client }}
 
-        ## remove empty strings and parse command lines
-        readarray -t lines <<< "$(echo "${{ inputs.kcadm }}" | sed '/^$/d')"
+    #     ## remove empty strings and parse command lines
+    #     readarray -t lines <<< "$(echo "${{ inputs.kcadm }}" | sed '/^$/d')"
 
-        ## Execute kcadm.sh for each command line
-        for l in "${lines[@]}";
-        do
-          echo "::debug title=command execution::Executing command $l"
-          eval "/tmp/keycloak/bin/kcadm.sh $l";
-        done
+    #     ## Execute kcadm.sh for each command line
+    #     for l in "${lines[@]}";
+    #     do
+    #       echo "::debug title=command execution::Executing command $l"
+    #       eval "/tmp/keycloak/bin/kcadm.sh $l";
+    #     done
 
 
 
