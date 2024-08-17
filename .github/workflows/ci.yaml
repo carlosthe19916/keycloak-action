@@ -8,37 +8,10 @@ on:
       - "master"
 
 jobs:
-  # legacy:
-  #   runs-on: ubuntu-latest
-  #   strategy:
-  #     matrix:
-  #       version: ["12.0.2", "19.0.3-legacy"]
-  #     fail-fast: false
-  #   services:
-  #     keycloak:
-  #       image: quay.io/keycloak/keycloak:${{ matrix.version }}
-  #       ports:
-  #         - 8180:8080
-  #       env:
-  #         KEYCLOAK_USER: admin
-  #         KEYCLOAK_PASSWORD: password
-  #       options: >-
-  #         --health-cmd "curl --fail http://localhost:8080/auth || exit 1"
-  #         --health-interval 10s
-  #         --health-timeout 5s
-  #         --health-retries 5
-  #   steps:
-  #     - name: Keycloak Admin CLI
-  #       uses: carlosthe19916/keycloak-action@master
-  #       with:
-  #         version: ${{ matrix.version }}
-  #         server: http://keycloak:8080/auth
-  #         username: admin
-  #         password: password
-  #         kcadm: get realms
-
   quarkus:
     runs-on: ubuntu-latest
+    container:
+      image: ubuntu
     strategy:
       matrix:
         version: ["latest"]
