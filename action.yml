@@ -39,23 +39,8 @@ runs:
     - name: Download Keycloak client
       shell: bash
       env:
-        KEYCLOAK_IMG: quay.io/keycloak/keycloak:${{ inputs.version }}
-      run: |
-        mkdir -p /tmp/keycloak/bin
-
-        bin_directory=""
-        if [ "${{ inputs.version }}" = "latest" ]; then 
-          bin_directory="/opt/keycloak/bin"
-        else
-          major_version=$(("$(echo ${{ inputs.version }} | cut -d'.' -f1)"))        
-          if (( major_version > 19 )); then
-            bin_directory="/opt/keycloak/bin"
-          else
-            bin_directory="/opt/jboss/keycloak/bin"
-          fi;
-        fi;
-
-        docker cp $(docker create --name download $KEYCLOAK_IMG ls):$bin_directory /tmp/keycloak/bin && docker rm download
+        KEYCLOAK_VERSION: ${{ inputs.version }}
+      run: ./prepare.sh
         
     - name: Execute client
       shell: bash
