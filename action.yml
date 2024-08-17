@@ -58,6 +58,7 @@ runs:
             fi;
         fi;
 
+        mkdir -p /tmp/keycloak
         docker cp $(docker create --name download $KEYCLOAK_IMG ls):${BIN_DIRECTORY} /tmp/keycloak/bin && docker rm download
         
     - name: Execute client
