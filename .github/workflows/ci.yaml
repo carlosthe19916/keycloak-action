@@ -10,8 +10,6 @@ on:
 jobs:
   quarkus:
     runs-on: ubuntu-latest
-    container:
-      image: ubuntu
     strategy:
       matrix:
         version: ["latest"]
