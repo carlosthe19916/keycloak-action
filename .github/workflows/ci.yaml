@@ -16,6 +16,10 @@ jobs:
         version: ["19.0.2-legacy", "12.0.4"]
       fail-fast: false
     steps:
+      - uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: "17"
       - name: Init Keycloak
         run: |
           docker run -d --name keycloak -p 8080:8080 \
