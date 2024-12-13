@@ -4,7 +4,7 @@ Github Action for executing [Keycloak](https://www.keycloak.org/) Admin CLI agai
 You can read more about Keycloak Admin CLI in the official [documentation](https://www.keycloak.org/docs/latest/server_admin/index.html#the-admin-cli).
 
 ## Usage
-To execute one or more commands using the Keycloak Admin CLI within your Github Actions pipeline include `carlosthe19916/keycloak-action@0.6` in your `workflow.yml` file.
+To execute one or more commands using the Keycloak Admin CLI within your Github Actions pipeline include `carlosthe19916/keycloak-action@0.7` in your `workflow.yml` file.
 
 Inside your `.github/workflows/workflow.yml` file:
 
@@ -12,7 +12,7 @@ Inside your `.github/workflows/workflow.yml` file:
 steps:
 - uses: actions/checkout@v2
 - name: Keycloak Admin CLI
-  uses: carlosthe19916/keycloak-action@0.6
+  uses: carlosthe19916/keycloak-action@0.7
   with:
     version: latest
     server: http://keycloak:8080
@@ -27,7 +27,7 @@ To execute more than one command:
 steps:
 - uses: actions/checkout@v2
 - name: Keycloak Admin CLI
-  uses: carlosthe19916/keycloak-action@0.4
+  uses: carlosthe19916/keycloak-action@0.7
   with:
     server: http://keycloak:8080/auth
     username: admin
@@ -68,7 +68,7 @@ jobs:
           -e KEYCLOAK_ADMIN_PASSWORD=password \
           quay.io/keycloak/keycloak:latest start-dev
       - name: Keycloak Admin CLI
-        uses: carlosthe19916/keycloak-action@0.6
+        uses: carlosthe19916/keycloak-action@0.7
         with:
           version: latest
           server: http://localhost:8080
