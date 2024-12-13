@@ -36,6 +36,10 @@ inputs:
 runs:
   using: composite
   steps:
+    - uses: actions/setup-java@v4
+      with:
+        distribution: "temurin"
+        java-version: "17"
     - name: Download Keycloak client
       shell: bash
       env:
