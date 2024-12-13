@@ -71,7 +71,7 @@ jobs:
         uses: carlosthe19916/keycloak-action@0.6
         with:
           version: latest
-          server: http://keycloak:8080
+          server: http://localhost:8080
           username: admin
           password: password
           kcadm: |
