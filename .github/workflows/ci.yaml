@@ -3,53 +3,27 @@ name: ci
 on:
   push:
     branches:
-      - "master"
-      - "test"
+      - "demo"
   pull_request:
     branches:
-      - "master"
+      - "demo"
 
 jobs:
-  legacy:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        version: ["19.0.2-legacy", "12.0.4"]
-      fail-fast: false
-    steps:
-      - name: Init Keycloak
-        run: |
-          docker run -d --name keycloak -p 8080:8080 \
-          -e KEYCLOAK_USER=admin \
-          -e KEYCLOAK_PASSWORD=password \
-          quay.io/keycloak/keycloak:${{ matrix.version }}
-      - name: Keycloak Admin CLI
-        uses: carlosthe19916/keycloak-action@master
-        with:
-          version: ${{ matrix.version }}
-          server: http://localhost:8080/auth
-          username: admin
-          password: password
-          kcadm: get realms
-
   quarkus:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        version: ["latest", "25.0.1", "19.0.2"]
-      fail-fast: false
     steps:
       - name: Init Keycloak
         run: |
           docker run -d --name keycloak -p 8080:8080 \
           -e KEYCLOAK_ADMIN=admin \
-          -e KEYCLOAK_ADMIN_PASSWORD=password \
-          quay.io/keycloak/keycloak:${{ matrix.version }} start-dev
+          -e KEYCLOAK_ADMIN_PASSWORD=admin \
+          quay.io/keycloak/keycloak:latest start-dev
       - name: Keycloak Admin CLI
         uses: carlosthe19916/keycloak-action@master
         with:
-          version: ${{ matrix.version }}
-          server: http://localhost:8080
+          version: latest
+          server: http://keycloak:8080
           username: admin
-          password: password
-          kcadm: get realms
+          password: admin
+          kcadm: |
+            update realms/master -s sslRequired=NONE --server http://keycloak:8080
