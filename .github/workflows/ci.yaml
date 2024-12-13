@@ -9,7 +9,7 @@ on:
       - "demo"
 
 jobs:
-  quarkus:
+  demo:
     runs-on: ubuntu-latest
     steps:
       - name: Init Keycloak
@@ -22,8 +22,8 @@ jobs:
         uses: carlosthe19916/keycloak-action@master
         with:
           version: latest
-          server: http://keycloak:8080
+          server: http://localhost:8080
           username: admin
           password: admin
           kcadm: |
-            update realms/master -s sslRequired=NONE --server http://keycloak:8080
+            update realms/master -s sslRequired=NONE --server http://localhost:8080
